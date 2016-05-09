@@ -1,4 +1,4 @@
-# 初始版本
+#初始版本
 # coding=utf-8
 import urllib
 from bs4 import BeautifulSoup
@@ -14,9 +14,15 @@ def getWeixinInfo(keyword):
     html = urllib.urlopen(url)
     bsObj = BeautifulSoup(html.read())
 
-    scr=bsObj.title.text  #搜索来源
-    DYH_url=re.findall(bsObj.h4.a['href']) #提取URL
-    ti=re.findall(bsObj.h4.text) #文章标题
+    for scr in bsObj.find_all("title"):
+        scr1 = scr.text #搜索来源
+
+    for DYH_url in bsObj.find_all("h4"):
+        DYH_url1 = DYH_url.a['href'] #提取URL
+
+    for ti in bsObj.find_all("h4"):
+        ti1= ti.text  #文章标题
+
 
     for time in bsObj.find_all("span", {"class": "time"}):
         times = (time.script)  # time
@@ -27,6 +33,7 @@ def getWeixinInfo(keyword):
         title=(title.script.get_text()) #公众号
         titles = title[title.find('("') + 1: title.find('", ')]
 
-    print scr,DYH_url,ti,times,titles
+        print scr1, DYH_url1, ti1, times, titles
 
 getWeixinInfo("终端")
+
