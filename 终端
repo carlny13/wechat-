@@ -32,6 +32,7 @@ def getWeixinInfo(keyword):
     for title in bsObj.find_all("div",{"class":"s-p"},{"t":"1461641764"}):
         title=(title.script.get_text()) #公众号
         titles = title[title.find('("') + 1: title.find('", ')]
+        #注意使用findall时要用for循环才能查收全总内容，print时注意缩进格式，要涵盖所有的for循环。要不然只会出来第一条结果。
 
         print scr1, DYH_url1, ti1, times, titles
 
