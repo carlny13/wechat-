@@ -1,0 +1,42 @@
+# coding=utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
+import urllib
+from bs4 import BeautifulSoup
+from urllib import quote
+import time
+import  re
+file=open("F:/python/sogou_UE.txt",'wb')
+
+def getWeixinInfo(keyword):
+    print
+    quote(keyword)
+    url = "http://weixin.sogou.com/weixin?type=2&query=" + quote(
+        keyword) + "&ie=utf8&_sug_=n&_sug_type_=1&w=01015002&oq=&ri=0&sourceid=sugg&sut=0&sst0=1461917415658&lkt=0%2C0%2C0&p=40040108"
+    html = urllib.urlopen(url)
+    bsObj = BeautifulSoup(html.read())
+
+    for scr in bsObj.find_all("title"):
+        scr1 = scr.text #搜索来源
+
+    for DYH_url in bsObj.find_all("h4"):
+        DYH_url1 = DYH_url.a['href'] #提取URL
+
+    for ti in bsObj.find_all("h4"):
+        ti1= ti.text  #文章标题
+
+    for time in bsObj.find_all("span", {"class": "time"}):
+        times = time.script  # time
+
+
+    for title in bsObj.find_all("div",{"class":"s-p"},{"t":"1461641764"}):
+        title=(title.script.get_text()) #公众号
+        titles = title[title.find('("') + 2: title.find('", ')]
+
+        result=scr1+","+DYH_url1+","+ti1+","+str(times)+","+str(titles)+"\n"
+        file.write(result.encode('utf-8') + "\n")
+        print "写入成功！"
+
+
+getWeixinInfo("终端")
