@@ -40,3 +40,40 @@ def getWeixinInfo(keyword):
 
 
 getWeixinInfo("终端")
+
+
+#实现时间时间戳转换为字符串指定时间格式：
+
+# coding=utf-8
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
+import urllib
+from bs4 import BeautifulSoup
+from urllib import quote
+import time
+import  re
+file=open("F:/python/sogou_UE.txt",'wb')
+
+def timeSwap(timeStamp):
+    timeStamp = int(timeStamp)
+    timeArray = time.localtime(timeStamp)
+    otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
+    return otherStyleTime
+
+
+def getWeixinInfo(keyword):
+    print
+    quote(keyword)
+    url = "http://weixin.sogou.com/weixin?type=2&query=" + quote(
+        keyword) + "&ie=utf8&_sug_=n&_sug_type_=1&w=01015002&oq=&ri=0&sourceid=sugg&sut=0&sst0=1461917415658&lkt=0%2C0%2C0&p=40040108"
+    html = urllib.urlopen(url)
+    bsObj = BeautifulSoup(html.read())
+
+    for time1 in bsObj.findAll("span", {"class": "time"}):
+        times = time1.script.text  # time
+        timeStamp = times[times.find("('") + 2: times.find("')")]
+
+        print timeSwap(timeStamp)
+
+getWeixinInfo("终端")
